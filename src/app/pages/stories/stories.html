@@ -1,10 +1,22 @@
-<p>stories works!</p>
-<!-- @for -->
-@for (item of stories; track item.title) {
-  <p>{{ item.title }}</p>
-  @if (item.views > 8000) {
-    <span>Hot</span>
-  }
-}
+<h2>Danh sách truyện</h2>
+<table border="1" cellpadding="10" cellspacing="0">
+  <tr>
+    <th>ID</th>
+    <th>Tên truyện</th>
+    <th>Tác giả</th>
+    <th>Lượt xem</th>
+    <th>Hành động</th>
+  </tr>
 
-<!-- @if -->
+  @for (story of stories; track story.id) {
+    <tr>
+      <td>{{ story.id }}</td>
+      <td>{{ story.title }}</td>
+      <td>{{ story.author }}</td>
+      <td>{{ story.views }}</td>
+      <td>
+        <button (click)="deleteStory(story.id)">Xóa</button>
+      </td>
+    </tr>
+  }
+</table>
