@@ -1,4 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+
+interface Story {
+  title: string;
+  author: string;
+  views: number;
+}
 
 @Component({
   selector: 'app-stories',
@@ -7,21 +14,20 @@ import { Component } from '@angular/core';
   styleUrl: './stories.css',
 })
 export class Stories {
-  stories = [
-    {
-      title: 'One Piece',
-      author: 'Oda',
-      views: 100000,
-    },
-    {
-      title: 'Naruto',
-      author: 'Kishimoto',
-      views: 90000,
-    },
-    {
-      title: 'Doraemon',
-      author: 'Fujiko F Fujio',
-      views: 70000,
-    },
-  ];
+  stories: Story[] = [];
+
+  // httpClient ~ axios
+  constructor(private http: HttpClient) {}
+  // genric type <T>
+  ngOnInit() {
+    this.http.get<Story[]>(' http://localhost:3000/stories').subscribe({
+      next: (data) => {
+        console.log(data);
+        this.stories = data;
+      },
+      error: () => {
+        console.log('error');
+      },
+    });
+  }
 }
