@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "db": "npx db.json",
+    "db": "json-server --watch db.json --port 3000",
     "start": "ng serve",
     "dev": "ng serve",
     "build": "ng build",
