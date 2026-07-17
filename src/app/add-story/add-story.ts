@@ -27,7 +27,10 @@ export class AddStory {
     this.http
       .post('http://localhost:3000/stories', this.addForm.value)
       .subscribe({
-        next: () => {},
+        next: () => {
+          // thong bao
+          // chuyen huong sang man list: router.navigateByUrl('/stories')
+        },
         error: () => {},
       });
   }
