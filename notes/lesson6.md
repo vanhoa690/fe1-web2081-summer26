@@ -26,6 +26,8 @@ export class AddStory {
   addForm: FormGroup;
 
   success = "";
+  error = "";
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -64,7 +66,7 @@ export class AddStory {
 <form [formGroup]="addForm" (ngSubmit)="submitForm()">
   <input type="text" formControlName="title" />
 
-  <button type="submit" [disabled]="loading">{{ loading ? 'Đang gửi...' : 'Thêm truyện' }}</button>
+  <button type="submit">"Thêm truyện"</button>
 </form>
 
 @if (success) {
@@ -123,8 +125,9 @@ export class StoryService {
 
 ### Bài 3
 
-Hiển thị loading + error
+- Hiển thị loading + error
+- Loading là true thì disabled, text button là "Đang gửi"
 
 ### Bài 4
 
-Refactor sang service
+Refactor sang service: productService, storyService
