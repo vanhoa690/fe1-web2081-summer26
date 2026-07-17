@@ -126,7 +126,7 @@ export class StoryService {
 ### Bài 3
 
 - Hiển thị loading + error
-- Loading là true thì disabled, text button là "Đang gửi"
+- Loading là true thì disabled button và đổi text button là "Đang gửi"
 
 ### Bài 4
 
