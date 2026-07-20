@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -16,6 +17,7 @@ export class EditStory {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private http: HttpClient,
   ) {
     this.editForm = this.fb.group({
       title: '',
@@ -25,7 +27,15 @@ export class EditStory {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id);
+    console.log('id', this.id);
+    this.http.get(`http://localhost:3000/stories/${this.id}`).subscribe({
+      next: (data) => {
+        console.log(data);
+        // fill form
+        this.editForm.patchValue(data);
+      },
+      error: () => {},
+    });
   }
 
   // method: submitForm
