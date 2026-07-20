@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-story',
@@ -10,12 +11,21 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 export class EditStory {
   // FormGroup
   editForm: FormGroup;
+  id: string | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+  ) {
     this.editForm = this.fb.group({
       title: '',
       // author, cover...
     });
+  }
+
+  ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
+    console.log(this.id);
   }
 
   // method: submitForm
