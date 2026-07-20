@@ -16,6 +16,9 @@
       <td>{{ story.views }}</td>
       <td>
         <button (click)="deleteStory(story.id)">Xóa</button>
+        <button>
+          <a [routerLink]="['/edit', story.id]"> Edit </a>
+        </button>
       </td>
     </tr>
   }
