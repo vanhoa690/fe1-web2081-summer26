@@ -28,6 +28,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 
+interface Story {
+  id: number;
+  titel: string;
+}
+
 @Component({
   selector: "app-edit-story",
   imports: [ReactiveFormsModule],
@@ -55,12 +60,10 @@ export class EditStory {
 
     if (this.id) {
       // 2. Gọi API lấy dữ liệu
-      this.http.get(`http://localhost:3000/stories/${this.id}`).subscribe({
-        next: (data: any) => {
+      this.http.get<Story>(`http://localhost:3000/stories/${this.id}`).subscribe({
+        next: (data) => {
           // 3. Set dữ liệu vào form
-          this.editForm.patchValue({
-            title: data.title,
-          });
+          this.editForm.patchValue(data);
         },
         error: () => {
           alert("Không load được dữ liệu");
