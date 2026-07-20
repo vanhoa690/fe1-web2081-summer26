@@ -41,5 +41,11 @@ export class EditStory {
   // method: submitForm
   submitForm() {
     console.log(this.editForm.value);
+    this.http
+      .put(`http://localhost:3000/stories/${this.id}`, this.editForm.value)
+      .subscribe({
+        next: () => {},
+        error: () => {},
+      });
   }
 }
