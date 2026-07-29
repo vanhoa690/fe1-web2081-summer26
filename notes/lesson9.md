@@ -1,74 +1,89 @@
-# Angular Cơ Bản -- Buổi 9 (Register API `/register`)
+# Angular Cơ Bản - Buổi 9
 
-## Nội dung buổi học
+# Register API (`/register`)
 
-- Tạo form đăng ký UI đẹp (Tailwind)
-- Gọi API `/register`
-- Validate cơ bản
-- Loading / Error / Success
+## Mục tiêu bài học
 
----
+Sau bài học này, sinh viên có thể:
 
-## 1. Ý tưởng
-
-Luồng:
-
-1.  Nhập form
-2.  Validate
-3.  Submit → POST `/register`
-4.  Thành công → thông báo / chuyển trang
+- Tạo form đăng ký bằng Reactive Forms
+- Validate dữ liệu trước khi gửi
+- Gọi API Register bằng HttpClient
+- Hiển thị Loading
+- Hiển thị thông báo thành công/thất bại
 
 ---
 
-## 2. Component Register
+# Nội dung
+
+- Reactive Form
+- Validators
+- Gọi API Register
+- Loading
+- Thông báo lỗi
+
+---
+
+# 1. Luồng hoạt động
+
+```text
+Nhập thông tin
+        ↓
+Validate dữ liệu
+        ↓
+Nhấn Đăng ký
+        ↓
+POST /register
+        ↓
+Thành công → Chuyển sang Login
+```
+
+---
+
+# 2. Tạo Form
 
 ```ts
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+constructor(
+  private fb: FormBuilder,
+  private http: HttpClient,
+  private router: Router
+) {
+  this.registerForm = this.fb.group({
+    name: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    password: ["", [Validators.required, Validators.minLength(6)]],
+  });
+}
+```
 
-@Component({
-  selector: "app-register",
-  imports: [ReactiveFormsModule],
-  templateUrl: "./register.html",
-  styleUrl: "./register.css",
-})
-export class Register {
-  registerForm: FormGroup;
+Ở đây chúng ta sử dụng:
 
-  loading = false;
-  error = "";
-  success = "";
+- `Validators.required` → bắt buộc nhập
+- `Validators.email` → đúng định dạng email
+- `Validators.minLength(6)` → mật khẩu tối thiểu 6 ký tự
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private router: Router,
-  ) {
-    this.registerForm = this.fb.group({
-      name: "",
-      email: "",
-      password: "",
-    });
+---
+
+# 3. Submit Form
+
+```ts
+submitForm() {
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
+    return;
   }
 
-  submitForm() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      return;
-    }
+  this.loading = true;
+  this.error = "";
 
-    this.loading = true;
-    this.error = "";
-    this.success = "";
-
-    const data = this.registerForm.value;
-
-    this.http.post("http://localhost:3000/register", data).subscribe({
+  this.http
+    .post("http://localhost:3000/register", this.registerForm.value)
+    .subscribe({
       next: () => {
         this.loading = false;
-        this.success = "Đăng ký thành công";
+
+        alert("Đăng ký thành công");
+
         this.router.navigateByUrl("/login");
       },
       error: () => {
@@ -76,67 +91,162 @@ export class Register {
         this.error = "Đăng ký thất bại";
       },
     });
-  }
 }
 ```
 
+Trước khi gọi API, kiểm tra:
+
+```ts
+if (this.registerForm.invalid)
+```
+
+Nếu form chưa hợp lệ thì dừng lại và hiển thị lỗi.
+
 ---
 
-## 3. HTML
+# 4. HTML
 
 ```html
-<div class="p-6 max-w-md mx-auto">
-  <h1 class="text-2xl font-semibold mb-6">Đăng ký</h1>
+<div class="max-w-md mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-6">Đăng ký</h1>
 
-  <form [formGroup]="registerForm" (ngSubmit)="submitForm()" class="space-y-6">
+  <form [formGroup]="registerForm" (ngSubmit)="submitForm()" class="space-y-4">
     <div>
-      <label class="block font-medium mb-1">Tên</label>
-      <input formControlName="name" type="text" class="w-full border rounded-lg px-3 py-2" />
+      <label>Tên</label>
+
+      <input class="w-full border rounded p-2" formControlName="name" />
+
+      @if(registerForm.get('name')?.touched && registerForm.get('name')?.invalid){
+
+      <p class="text-red-500 text-sm">Vui lòng nhập tên</p>
+
+      }
     </div>
 
     <div>
-      <label class="block font-medium mb-1">Email</label>
-      <input formControlName="email" type="email" class="w-full border rounded-lg px-3 py-2" />
+      <label>Email</label>
+
+      <input class="w-full border rounded p-2" type="email" formControlName="email" />
+
+      @if(registerForm.get('email')?.touched && registerForm.get('email')?.invalid){
+
+      <p class="text-red-500 text-sm">Email không hợp lệ</p>
+
+      }
     </div>
 
     <div>
-      <label class="block font-medium mb-1">Mật khẩu</label>
-      <input formControlName="password" type="password" class="w-full border rounded-lg px-3 py-2" />
+      <label>Mật khẩu</label>
+
+      <input class="w-full border rounded p-2" type="password" formControlName="password" />
+
+      @if(registerForm.get('password')?.touched && registerForm.get('password')?.invalid){
+
+      <p class="text-red-500 text-sm">Mật khẩu tối thiểu 6 ký tự</p>
+
+      }
     </div>
 
-    <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-lg w-full">Đăng ký</button>
+    @if(error){
+    <div class="text-red-500">{{ error }}</div>
+    }
+
+    <button class="w-full bg-blue-600 text-white py-2 rounded disabled:bg-gray-400" [disabled]="loading">{{ loading ? "Đang đăng ký..." : "Đăng ký" }}</button>
   </form>
 </div>
 ```
 
 ---
 
-## 4. Bài tập
+# 5. Kết quả
 
-### Bài 1
+Khi form chưa hợp lệ:
 
-Thêm confirmPassword
+- Không gọi API
+- Hiển thị lỗi
 
-### Bài 2
+Khi hợp lệ:
 
-Reset form sau khi đăng ký
+```text
+POST /register
+```
 
-### Bài 3
+Nếu thành công:
 
-Disable button khi form invalid
+```text
+Đăng ký thành công
+↓
 
-### Bài 4
+Chuyển sang Login
+```
 
-Hiển thị lỗi rõ ràng
+Nếu thất bại:
 
-### Bài 5
-
-Lưu token vào localStorage
+```text
+Đăng ký thất bại
+```
 
 ---
 
-## Tổng kết
+# Bài tập
 
-- Gọi API `/register`
-- Validate form
-- UI đẹp với Tailwind
+## Bài 1
+
+Thêm trường **Confirm Password**
+
+Yêu cầu:
+
+- Bắt buộc nhập
+- Phải giống Password
+
+---
+
+## Bài 2
+
+Sau khi đăng ký thành công:
+
+```ts
+this.registerForm.reset();
+```
+
+---
+
+## Bài 3
+
+Hiển thị thông báo:
+
+```
+Email đã tồn tại
+```
+
+nếu API trả về lỗi.
+
+---
+
+## Bài 4
+
+Thêm nút:
+
+```
+Đã có tài khoản? Đăng nhập
+```
+
+Khi nhấn:
+
+```ts
+this.router.navigateByUrl("/login");
+```
+
+---
+
+# Tổng kết
+
+Sau buổi học, sinh viên đã biết:
+
+- Tạo Reactive Form
+- Sử dụng Validators
+- Kiểm tra dữ liệu trước khi gọi API
+- Gọi API bằng HttpClient
+- Hiển thị Loading
+- Hiển thị lỗi từ API
+- Điều hướng sang trang Login
