@@ -1,4 +1,11 @@
 {
-  "students": [],
+  "stories": [
+    {
+      "id": 1,
+      "title": "One Piece",
+      "author": "Oda",
+      "views": 100000
+    }
+  ],
   "users": []
 }
