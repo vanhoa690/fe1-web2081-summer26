@@ -1,6 +1,6 @@
 # Angular Cơ Bản -- Buổi 10 Login + Lưu Token LocalStorage
 
-# Login API (`/login`)
+## Login API (`/login`)
 
 ## Nội dung buổi học
 
@@ -44,7 +44,7 @@ Lưu LocalStorage
 
 ---
 
-# 2. API Login
+## API Login
 
 ```http
 POST http://localhost:3000/login
@@ -73,7 +73,7 @@ Response
 
 ---
 
-# 3. Tạo Login Service
+# 2. Tạo Login Service
 
 ```bash
 ng generate service services/auth
@@ -106,7 +106,7 @@ export class AuthService {
 - Dễ tái sử dụng.
 - Dễ bảo trì dự án.
 
-## 2. Component Login
+# 3.Component Login
 
 ```ts
 import { Component } from "@angular/core";
@@ -168,7 +168,7 @@ export class Login {
 
 ---
 
-## 3. HTML
+## 4.HTML
 
 ```html
 <div class="p-6 max-w-md mx-auto">
@@ -185,7 +185,7 @@ export class Login {
       <input formControlName="password" type="password" class="w-full border rounded-lg px-3 py-2" />
     </div>
 
-    <button type="submit" [disabled]="loginForm.invalid || loading" class="px-5 py-2 bg-green-600 text-white rounded-lg w-full">{{ loading ? "Đang đăng nhập..." : "Đăng nhập" }}</button>
+    <button type="submit" [disabled]="loading" class="px-5 py-2 bg-green-600 text-white rounded-lg w-full">{{ loading ? "Đang đăng nhập..." : "Đăng nhập" }}</button>
 
     <p class="text-red-500" *ngIf="error">{{ error }}</p>
   </form>
@@ -194,21 +194,7 @@ export class Login {
 
 ---
 
-## 4. Response API
-
-```json
-{
-  "accessToken": "abc123...",
-  "user": {
-    "id": 1,
-    "email": "test@gmail.com"
-  }
-}
-```
-
----
-
-# 6. Lưu Token vào LocalStorage
+## 5. Lưu Token, User vào LocalStorage
 
 ```ts
 localStorage.setItem("token", res.accessToken);
@@ -217,7 +203,7 @@ localStorage.setItem("user", JSON.stringify(res.user));
 
 ---
 
-# 7. Đọc dữ liệu
+## 6. Đọc dữ liệu
 
 ```ts
 const token = localStorage.getItem("token");
@@ -271,8 +257,9 @@ Tự động thêm token vào mọi request (Interceptor)
 
 ## 9. Tổng kết
 
-- Gọi API `/login`
-- Nhận token
-- Lưu localStorage
-- Dùng token cho API
-- Điều hướng sau login
+- Tạo form đăng nhập bằng Reactive Forms.
+- Gọi API Login bằng Service.
+- Validate dữ liệu người dùng.
+- Lưu và đọc Token từ LocalStorage.
+- Điều hướng sau khi đăng nhập.
+- Thực hiện Logout.
