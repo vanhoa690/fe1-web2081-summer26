@@ -7,5 +7,12 @@
       "views": 100000
     }
   ],
-  "users": []
+  "users": [
+    {
+      "email": "hoadv21@fpt.edu.vn",
+      "password": "$2a$10$mU.YJ4gaxo.QbkL96PjA..0quyKxUCFnvSqHk4OJ2uqEyTjsrSHS2",
+      "username": "2342",
+      "id": 1
+    }
+  ]
 }
