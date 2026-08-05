@@ -41,28 +41,6 @@ App
 
 ---
 
-## 2. Vòng đời của một ứng dụng Angular
-
-```text
-Người dùng
-↓
-Component
-↓
-HttpClient
-↓
-API
-↓
-JSON Server
-↓
-Response
-↓
-Component
-↓
-Hiển thị lên giao diện
-```
-
----
-
 ## 3. Ôn tập CRUD
 
 - **Create** → `POST /products`
@@ -70,36 +48,19 @@ Hiển thị lên giao diện
 - **Update** → `PUT /products/:id`
 - **Delete** → `DELETE /products/:id`
 
-Quy trình:
-
-```text
-Form
-↓
-Component
-↓
-Service
-↓
-HttpClient
-↓
-API
-↓
-Server
-↓
-Response
-↓
-Refresh danh sách
-```
-
----
-
 ## 4. Ôn tập Reactive Form
 
+- Khởi tạo form
+
 ```ts
+form: FormGroup;
 this.form = this.fb.group({
   name: "",
   price: 0,
 });
 ```
+
+- Lấy giá trị form
 
 ```ts
 this.form.value;
@@ -148,24 +109,6 @@ export class ProductList {
     });
   }
 }
-```
-
----
-
-## 7. Quy trình khi mở trang CRUD
-
-```text
-Người dùng mở Product List
-↓
-constructor()
-↓
-ngOnInit()
-↓
-HttpClient
-↓
-API
-↓
-Hiển thị dữ liệu
 ```
 
 ---
